@@ -443,7 +443,7 @@
                     <hr>
                     <p class="text-muted small mb-0">
                         Need more? Try the <a href="https://speval.tokenengine.ai/" target="_blank"><strong>full version</strong></a>
-                        with unlimited analyses, PDF downloads, and custom branding.
+                        with more analyses, PDF downloads, and custom branding.
                     </p>
                 </div>
             </div>
@@ -475,7 +475,7 @@ document.getElementById('evalForm').addEventListener('submit', async function(e)
             btn.classList.add('btn-success');
         } else if (resp.status === 429) {
             resultBox.innerHTML =
-                '<div class="alert alert-warning">Visit <a href="https://speval.tokenengine.ai/" target="_blank">speval.tokenengine.ai</a> for the full version with unlimited analyses.</div>';
+                '<div class="alert alert-warning">Visit <a href="https://speval.tokenengine.ai/" target="_blank">speval.tokenengine.ai</a> for the full version with more analyses.</div>';
             btn.disabled = false;
             btn.innerHTML = 'Analyze My Termsheet';
         } else {
