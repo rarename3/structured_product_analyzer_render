@@ -400,9 +400,19 @@
                     <div id="resultBox" class="mt-3"></div>
 
                     <hr>
-                    <p class="text-muted small mb-0">
-                        Need more? Try the <a href="https://speval.tokenengine.ai/" target="_blank"><strong>full version</strong></a>
-                        with more analyses, PDF downloads, and custom branding.
+                    <p class="small mb-1" style="color:#444; font-weight:600;">Trusted by Wealth Advisors, Portfolio Managers &amp; HNW Investors</p>
+                    <p class="text-muted small mb-2">
+                        <a href="https://speval.tokenengine.ai/" target="_blank"><strong>SP Evaluator</strong></a>
+                        is the professional-grade platform for structured product analysis:
+                    </p>
+                    <ul class="text-muted small mb-2" style="padding-left:1.2rem;">
+                        <li>Higher volume of analyses for your book of business</li>
+                        <li>Downloadable PDF reports to share with clients</li>
+                        <li>Custom branding with your firm's logo &amp; contact details</li>
+                        <li>Multi-language support across 9 languages</li>
+                    </ul>
+                    <p class="small mb-0">
+                        <a href="https://speval.tokenengine.ai/" target="_blank" style="color:#1e3c72; font-weight:600;">See plans and pricing &rarr;</a>
                     </p>
                 </div>
             </div>
@@ -434,7 +444,7 @@ document.getElementById('evalForm').addEventListener('submit', async function(e)
             btn.classList.add('btn-success');
         } else if (resp.status === 429) {
             resultBox.innerHTML =
-                '<div class="alert alert-warning">Visit <a href="https://speval.tokenengine.ai/" target="_blank">speval.tokenengine.ai</a> for the full version with more analyses.</div>';
+                '<div class="alert alert-warning">You\'ve reached the free analysis limit. <a href="https://speval.tokenengine.ai/" target="_blank">See SP Evaluator plans</a> — trusted by Wealth Advisors, Portfolio Managers &amp; HNW Investors.</div>';
             btn.disabled = false;
             btn.innerHTML = 'Analyze My Termsheet';
         } else {
