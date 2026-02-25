@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Structured Product Analyzer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root { --primary: #1e3c72; --secondary: #2a5298; }
+        body { background: #f4f6f9; font-family: 'Segoe UI', sans-serif; }
+        .header-banner {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff; padding: 2.5rem 0; margin-bottom: 2rem;
+        }
+        .risk-badge {
+            display: inline-block; padding: 3px 12px; border-radius: 20px;
+            font-size: .75rem; font-weight: 600; color: #fff; margin-right: 4px;
+        }
+        .cat-card { border-left: 4px solid; border-radius: 0 8px 8px 0; background: #f8f9fa; padding: 1rem; margin-bottom: .75rem; }
+        .cat-card h6 { margin-bottom: .5rem; }
+        .upload-card { position: sticky; top: 1rem; }
+        #resultBox { display: none; }
+        .spinner-border { width: 1.2rem; height: 1.2rem; }
+    </style>
+</head>
+<body>
+
+<div class="header-banner">
+    <div class="container">
+        <h1 class="fw-bold"><i class="bi bi-bar-chart-line"></i> Free Structured Product Analyzer</h1>
+        <p class="lead mb-2">Upload your termsheet and receive a comprehensive AI-powered analysis report by email.</p>
+        <span class="risk-badge" style="background:#28a745;">Low Risk</span>
+        <span class="risk-badge" style="background:#ffc107;color:#212529;">Medium Risk</span>
+        <span class="risk-badge" style="background:#dc3545;">High Risk</span>
+        <span class="risk-badge" style="background:#8b0000;">Very High Risk</span>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="row">
+        <div class="col-lg-7">
+            <div class="card shadow-sm mb-3">
+                <div class="card-header fw-bold" style="background:var(--primary);color:#fff;">
+                    Structured Product Types We Analyze
+                </div>
+                <div class="card-body">
+
+                    <div class="accordion" id="productTypesAccordion">
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#capProtected" aria-expanded="true">
+                                    <span class="risk-badge me-2" style="background:#28a745;">Low Risk</span> Capital Protected Products
+                                </button>
+                            </h2>
+                            <div id="capProtected" class="accordion-collapse collapse show" data-bs-parent="#productTypesAccordion">
+                                <div class="accordion-body">
+                                    <p class="small mb-2"><strong>Primary Objective:</strong> Preserve invested capital while providing some participation in market upside<br>
+                                    <strong>Construction:</strong> Majority invested in zero-coupon bond (for capital protection) + small portion in options (for upside)<br>
+                                    <strong>Typical Investor:</strong> Conservative investors, retirees, risk-averse individuals seeking modest growth<br>
+                                    <strong>Key Risks:</strong> Inflation risk, opportunity cost, issuer credit risk, limited upside participation<br>
+                                    <strong>Best For:</strong> Sideways or moderately bullish markets where capital preservation is priority</p>
+                                    <div class="accordion accordion-flush" id="capProtectedSub">
+                                        <div class="accordion-item">
+                                            <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ppns">A. Principal Protected Notes (PPNs)</button></h3>
+                                            <div id="ppns" class="accordion-collapse collapse" data-bs-parent="#capProtectedSub">
+                                                <div class="accordion-body small">
+                                                    <p><strong>1. Fixed Coupon PPNs</strong><br>
+                                                    Provide regular fixed interest payments throughout the term plus return of principal at maturity. The coupon rate is typically lower than traditional bonds because of the embedded option component.<br>
+                                                    <strong>Structure:</strong> Bond + at-the-money call option on underlying asset<br>
+                                                    <strong>Payout:</strong> Fixed coupon payments + 100% principal + potential upside if underlying appreciates<br>
+                                                    <strong>Example:</strong> 5-year PPN with 3% annual coupon linked to S&P 500<br>
+                                                    <strong>Risk Profile:</strong> Lowest risk among PPNs, predictable income stream<br>
+                                                    <strong>Cost Structure:</strong> Lower option cost allows for higher bond allocation</p>
+                                                    <p><strong>2. Participation PPNs</strong><br>
+                                                    Offer direct exposure to the performance of an underlying asset with full capital protection. Participation rate determines how much of the upside is captured.<br>
+                                                    <strong>Structure:</strong> Zero-coupon bond + out-of-the-money call option(s)<br>
+                                                    <strong>Payout:</strong> 100% principal + (Underlying Return × Participation Rate)<br>
+                                                    <strong>Key Feature:</strong> Participation rate typically 50–100%; may have caps on maximum return<br>
+                                                    <strong>Example:</strong> PPN with 80% participation in NASDAQ gains, capped at 25% total return<br>
+                                                    <strong>Trade-off:</strong> Higher participation = lower bond allocation = higher risk</p>
+                                                    <p><strong>3. Autocallable PPNs</strong><br>
+                                                    Automatically redeem early if the underlying asset reaches predetermined trigger levels, providing potential for early return of principal plus premium.<br>
+                                                    <strong>Structure:</strong> Bond + autocall feature with barrier options<br>
+                                                    <strong>Observation:</strong> Periodic observation dates (quarterly/semi-annually)<br>
+                                                    <strong>Trigger:</strong> If underlying ≥ autocall level on observation date, product redeems<br>
+                                                    <strong>Example:</strong> 3-year autocallable PPN with 110% trigger level and 8% coupon if called<br>
+                                                    <strong>Advantage:</strong> Potential for higher yield if called early<br>
+                                                    <strong>Disadvantage:</strong> Reinvestment risk if called in low-rate environment</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#capGuaranteed">B. Capital Guaranteed Products</button></h3>
+                                            <div id="capGuaranteed" class="accordion-collapse collapse" data-bs-parent="#capProtectedSub">
+                                                <div class="accordion-body small">
+                                                    <p><strong>1. Full Capital Guarantee</strong><br>
+                                                    100% of principal is guaranteed regardless of underlying performance. The guarantee is typically provided by the issuer or through third-party insurance.<br>
+                                                    <strong>Mechanism:</strong> Entire bond component used for protection; options funded from issuer's capital<br>
+                                                    <strong>Cost:</strong> Higher cost structure reduces potential returns<br>
+                                                    <strong>Use Case:</strong> Absolute capital preservation requirements (e.g., endowment funds)<br>
+                                                    <strong>Regulation:</strong> Often requires special licensing for issuers<br>
+                                                    <strong>Market:</strong> Popular in Europe and Asia, less common in US</p>
+                                                    <p><strong>2. Partial Capital Guarantee</strong><br>
+                                                    Only a portion of principal is guaranteed (typically 80–95%), allowing for higher potential returns through larger option allocation.<br>
+                                                    <strong>Trade-off:</strong> Lower protection allows for higher participation rates or lower costs<br>
+                                                    <strong>Risk Profile:</strong> First loss buffer of 5–20% before capital erosion begins<br>
+                                                    <strong>Example:</strong> 90% capital guarantee with 120% participation in gold price appreciation<br>
+                                                    <strong>Investor Type:</strong> Moderate risk tolerance, seeking balance between protection and growth<br>
+                                                    <strong>Pricing:</strong> More cost-effective than full guarantee products</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#yieldEnhance">
+                                    <span class="risk-badge me-2" style="background:#ffc107;color:#212529;">Medium Risk</span> Yield Enhancement Products
+                                </button>
+                            </h2>
+                            <div id="yieldEnhance" class="accordion-collapse collapse" data-bs-parent="#productTypesAccordion">
+                                <div class="accordion-body">
+                                    <p class="small mb-2"><strong>Primary Objective:</strong> Generate above-market income by selling options and collecting premiums<br>
+                                    <strong>Construction:</strong> Bond + short option positions (writing calls/puts to earn income)<br>
+                                    <strong>Typical Investor:</strong> Income-focused investors willing to accept moderate capital risk for higher yields<br>
+                                    <strong>Key Risks:</strong> Capital loss if barriers breached, complexity risk, issuer risk<br>
+                                    <strong>Best For:</strong> Sideways or range-bound markets where volatility can be harvested</p>
+                                    <div class="accordion accordion-flush" id="yieldEnhanceSub">
+                                        <div class="accordion-item">
+                                            <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#reverseConv">A. Reverse Convertibles</button></h3>
+                                            <div id="reverseConv" class="accordion-collapse collapse" data-bs-parent="#yieldEnhanceSub">
+                                                <div class="accordion-body small">
+                                                    <p><strong>1. Single-Underlying Reverse Convertibles</strong><br>
+                                                    Pay enhanced coupons but convert into shares of the underlying stock if it falls below a predetermined barrier at maturity.<br>
+                                                    <strong>Structure:</strong> Bond + short put option on single stock<br>
+                                                    <strong>Conversion:</strong> If stock price &lt; barrier at maturity, investor receives shares instead of cash<br>
+                                                    <strong>Yield Source:</strong> Enhanced coupon = risk-free rate + option premium<br>
+                                                    <strong>Risk:</strong> Exposed to significant decline in single stock<br>
+                                                    <strong>Barrier Types:</strong> European (at maturity), American (anytime), Parisian (consecutive days)<br>
+                                                    <strong>Example:</strong> 6-month reverse convertible on AAPL with 70% barrier and 12% annualized coupon</p>
+                                                    <p><strong>2. Multi-Underlying Reverse Convertibles</strong><br>
+                                                    Similar to single-underlying but linked to basket of stocks, typically with "worst-of" payoff where the poorest performer determines the outcome.<br>
+                                                    <strong>Structure:</strong> Bond + worst-of put options on basket<br>
+                                                    <strong>Diversification:</strong> Reduces single-stock risk but introduces correlation risk<br>
+                                                    <strong>Payout:</strong> If ANY stock in basket &lt; barrier, conversion occurs based on worst performer<br>
+                                                    <strong>Example:</strong> Reverse convertible linked to basket of 5 tech stocks with 70% barrier<br>
+                                                    <strong>Correlation Risk:</strong> High correlation increases risk of conversion<br>
+                                                    <strong>Pricing:</strong> More complex due to basket option pricing</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#autocall">B. Autocallables (Yield Enhancement)</button></h3>
+                                            <div id="autocall" class="accordion-collapse collapse" data-bs-parent="#yieldEnhanceSub">
+                                                <div class="accordion-body small">
+                                                    <p><strong>1. Phoenix Autocallables</strong><br>
+                                                    Pay coupons only when the underlying asset is above a predetermined barrier on observation dates. No coupon payments if barrier is breached.<br>
+                                                    <strong>Structure:</strong> Bond + digital call options with memory feature<br>
+                                                    <strong>Coupon Condition:</strong> Coupon paid only if underlying ≥ coupon barrier on observation date<br>
+                                                    <strong>Risk:</strong> Potential for zero coupon payments during product life<br>
+                                                    <strong>Yield:</strong> Higher potential coupons to compensate for conditional payments<br>
+                                                    <strong>Observation:</strong> Typically monthly or quarterly observation dates<br>
+                                                    <strong>Example:</strong> 3-year Phoenix autocallable with 10% coupon if S&P 500 ≥ 80% of initial level</p>
+                                                    <p><strong>2. Memory Autocallables</strong><br>
+                                                    Similar to Phoenix but with "memory" feature where missed coupons are accumulated and paid later if conditions are met.<br>
+                                                    <strong>Memory Feature:</strong> Unpaid coupons accumulate and are paid when underlying recovers above barrier<br>
+                                                    <strong>Advantage:</strong> Reduces path dependency compared to standard Phoenix<br>
+                                                    <strong>Complexity:</strong> More complex pricing and higher cost<br>
+                                                    <strong>Investor Appeal:</strong> Attractive for volatile markets where recoveries are expected<br>
+                                                    <strong>Pricing Impact:</strong> Memory feature reduces coupon rate compared to standard Phoenix</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#rangeAccrual">C. Range Accruals</button></h3>
+                                            <div id="rangeAccrual" class="accordion-collapse collapse" data-bs-parent="#yieldEnhanceSub">
+                                                <div class="accordion-body small">
+                                                    <p><strong>1. Digital Range Accruals</strong><br>
+                                                    Pay a fixed coupon for each day the underlying asset stays within a predetermined range. No coupon for days outside the range.<br>
+                                                    <strong>Structure:</strong> Series of daily digital options that pay if underlying within range<br>
+                                                    <strong>Accrual:</strong> Coupon = (Days in range / Total days) × Fixed rate<br>
+                                                    <strong>Ideal Market:</strong> Low volatility, range-bound markets<br>
+                                                    <strong>Risk:</strong> Significant reduction in coupons if underlying breaks out of range<br>
+                                                    <strong>Range Types:</strong> Constant range, widening range, step-up range<br>
+                                                    <strong>Example:</strong> Range accrual with 10% coupon for days EUR/USD between 1.05–1.15</p>
+                                                    <p><strong>2. Variable Coupon Range Accruals</strong><br>
+                                                    Similar to digital but with variable coupon rates that depend on how far within the range the underlying is, or with different rates for different range segments.<br>
+                                                    <strong>Structure:</strong> Digital options with varying payoffs based on position within range<br>
+                                                    <strong>Variations:</strong> Can include step-up rates, tiered ranges, or participation rates<br>
+                                                    <strong>Complexity:</strong> More difficult to model and value<br>
+                                                    <strong>Investor Benefit:</strong> Higher potential coupons if underlying stays in "sweet spot"<br>
+                                                    <strong>Example:</strong> 5% coupon in outer range, 10% in middle range, 15% in inner range</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#participation">
+                                    <span class="risk-badge me-2" style="background:#dc3545;">High Risk</span> Participation &amp; Leveraged Products
+                                </button>
+                            </h2>
+                            <div id="participation" class="accordion-collapse collapse" data-bs-parent="#productTypesAccordion">
+                                <div class="accordion-body">
+                                    <p class="small mb-2"><strong>Primary Objective:</strong> Provide amplified exposure to underlying assets or direct market participation<br>
+                                    <strong>Construction:</strong> Primarily options-based with little or no bond component<br>
+                                    <strong>Typical Investor:</strong> Sophisticated investors, traders, those with high risk tolerance<br>
+                                    <strong>Key Risks:</strong> Amplified losses, time decay (theta), volatility risk, gap risk<br>
+                                    <strong>Best For:</strong> Strong directional views with defined time horizons</p>
+                                    <div class="accordion accordion-flush" id="participationSub">
+                                        <div class="accordion-item">
+                                            <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#twinWin">A. Twin-Win / Capped Participation</button></h3>
+                                            <div id="twinWin" class="accordion-collapse collapse" data-bs-parent="#participationSub">
+                                                <div class="accordion-body small">
+                                                    <p><strong>1. With Capital Protection</strong><br>
+                                                    Provide participation in both upside and downside movements but with caps on gains and protection from losses.<br>
+                                                    <strong>Structure:</strong> Zero-cost collar (long call + short put) with different strikes<br>
+                                                    <strong>Upside:</strong> Participate in gains up to cap (e.g., 20%)<br>
+                                                    <strong>Downside:</strong> Participate in losses with floor (e.g., -10% maximum loss)<br>
+                                                    <strong>Example:</strong> Twin-win with 20% gain cap and 10% loss floor<br>
+                                                    <strong>Cost:</strong> Typically zero premium structure<br>
+                                                    <strong>Use Case:</strong> Moderate volatility markets with defined ranges</p>
+                                                    <p><strong>2. Without Capital Protection</strong><br>
+                                                    Higher participation rates in exchange for full capital risk. Essentially a geared version of direct investment.<br>
+                                                    <strong>Structure:</strong> Leveraged long position using options or futures<br>
+                                                    <strong>Participation:</strong> Can offer 150–200% of underlying return<br>
+                                                    <strong>Risk:</strong> Full capital at risk with amplified losses<br>
+                                                    <strong>Example:</strong> 150% participation in oil price with no downside protection<br>
+                                                    <strong>Investor Type:</strong> High conviction on direction, short time horizon<br>
+                                                    <strong>Pricing:</strong> Lower cost than protected versions</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#leveraged">B. Leveraged Certificates</button></h3>
+                                            <div id="leveraged" class="accordion-collapse collapse" data-bs-parent="#participationSub">
+                                                <div class="accordion-body small">
+                                                    <p><strong>1. Bull Certificates</strong><br>
+                                                    Provide leveraged long exposure (typically 2x or 3x) to an underlying asset. Daily rebalancing means they track daily returns, not long-term returns.<br>
+                                                    <strong>Mechanism:</strong> Use swaps or futures to create synthetic leveraged position<br>
+                                                    <strong>Rebalancing:</strong> Daily rebalancing causes decay in volatile sideways markets<br>
+                                                    <strong>Holding Period:</strong> Designed for short-term trading, not long-term investing<br>
+                                                    <strong>Example:</strong> 2x Bull Certificate on gold tracking 2x daily gold price moves<br>
+                                                    <strong>Volatility Drag:</strong> Significant negative effect in high volatility environments<br>
+                                                    <strong>Liquidity:</strong> Exchange-traded with good liquidity in major markets</p>
+                                                    <p><strong>2. Bear Certificates</strong><br>
+                                                    Provide leveraged short exposure, profiting when the underlying asset declines. Inverse of bull certificates with similar characteristics.<br>
+                                                    <strong>Structure:</strong> Short position via swaps or futures with daily rebalancing<br>
+                                                    <strong>Use:</strong> Hedging or speculative bearish bets<br>
+                                                    <strong>Risk:</strong> Unlimited risk in theory (if underlying rises significantly)<br>
+                                                    <strong>Example:</strong> 3x Bear Certificate on technology sector ETF<br>
+                                                    <strong>Decay:</strong> Positive decay in sideways or up markets (works against holder)<br>
+                                                    <strong>Margin:</strong> No margin requirements for certificate holders</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#tracker">C. Tracker Certificates</button></h3>
+                                            <div id="tracker" class="accordion-collapse collapse" data-bs-parent="#participationSub">
+                                                <div class="accordion-body small">
+                                                    <p><strong>1. Dividend Adjusting Trackers</strong><br>
+                                                    Track the performance of an underlying asset while adjusting for dividend payments, either by reinvesting dividends or paying them out.<br>
+                                                    <strong>Structure:</strong> Total return swap replicating underlying + dividends<br>
+                                                    <strong>Variants:</strong> Price return (ex-dividend) vs. total return (with dividends)<br>
+                                                    <strong>Tax:</strong> Different tax treatment than direct stock ownership<br>
+                                                    <strong>Example:</strong> S&P 500 tracker with quarterly dividend payments<br>
+                                                    <strong>Tracking Error:</strong> Minimal with efficient swap structures<br>
+                                                    <strong>Cost:</strong> Lower than actively managed products</p>
+                                                    <p><strong>2. Outperformance Certificates</strong><br>
+                                                    Designed to outperform the underlying asset through option overlays or structured payoffs while maintaining similar risk profile.<br>
+                                                    <strong>Mechanism:</strong> Tracker + option strategy (e.g., covered call writing)<br>
+                                                    <strong>Outperformance:</strong> Achieved through yield enhancement or volatility capture<br>
+                                                    <strong>Cost:</strong> Higher fees for active management component<br>
+                                                    <strong>Example:</strong> Outperformance certificate with 110% participation and downside buffer<br>
+                                                    <strong>Risk:</strong> Capped upside potential in exchange for downside protection<br>
+                                                    <strong>Market Condition:</strong> Best in sideways or slightly bullish markets</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#altExposure">
+                                    <span class="risk-badge me-2" style="background:#8b0000;">Very High Risk</span> Alternative Exposure Products
+                                </button>
+                            </h2>
+                            <div id="altExposure" class="accordion-collapse collapse" data-bs-parent="#productTypesAccordion">
+                                <div class="accordion-body">
+                                    <p class="small mb-2"><strong>Primary Objective:</strong> Access complex strategies, multiple asset classes, or hard-to-reach markets<br>
+                                    <strong>Construction:</strong> Highly complex derivatives, multiple underlying assets, exotic options<br>
+                                    <strong>Typical Investor:</strong> Institutional investors, hedge funds, ultra-high-net-worth individuals<br>
+                                    <strong>Key Risks:</strong> Liquidity risk, model risk, correlation breakdown, tail risk, complexity risk<br>
+                                    <strong>Best For:</strong> Portfolio diversification, specific thematic exposure, sophisticated strategies</p>
+                                    <div class="accordion accordion-flush" id="altExposureSub">
+                                        <div class="accordion-item">
+                                            <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#basket">A. Basket Products</button></h3>
+                                            <div id="basket" class="accordion-collapse collapse" data-bs-parent="#altExposureSub">
+                                                <div class="accordion-body small">
+                                                    <p><strong>1. Worst-of Basket Products</strong><br>
+                                                    Performance determined by the worst-performing asset in a basket. Typically offer higher coupons but significant downside risk.<br>
+                                                    <strong>Structure:</strong> Bond + put option on worst performer in basket<br>
+                                                    <strong>Correlation:</strong> Most sensitive to correlation between basket components<br>
+                                                    <strong>Payout:</strong> Full payout only if ALL components above barriers<br>
+                                                    <strong>Risk:</strong> One bad performer can wipe out entire investment<br>
+                                                    <strong>Example:</strong> Worst-of basket of 10 emerging market currencies<br>
+                                                    <strong>Pricing Complexity:</strong> Requires correlation modeling and tail risk assessment</p>
+                                                    <p><strong>2. Best-of Basket Products</strong><br>
+                                                    Performance determined by the best-performing asset in a basket. Lower risk than worst-of but with correspondingly lower potential returns.<br>
+                                                    <strong>Structure:</strong> Bond + call option on best performer in basket<br>
+                                                    <strong>Diversification:</strong> Benefits from diversification as only one component needs to perform well<br>
+                                                    <strong>Cost:</strong> More expensive than worst-of due to lower risk<br>
+                                                    <strong>Example:</strong> Best-of basket of green energy stocks<br>
+                                                    <strong>Investor Appeal:</strong> Thematic exposure with built-in selection mechanism<br>
+                                                    <strong>Correlation Impact:</strong> Low correlation improves product value</p>
+                                                    <p><strong>3. Rainbow Basket Products</strong><br>
+                                                    Custom weighting or performance formula where different assets have different contributions to the final payout.<br>
+                                                    <strong>Structure:</strong> Complex option combinations with custom weights<br>
+                                                    <strong>Flexibility:</strong> Can overweight certain assets or create custom correlations<br>
+                                                    <strong>Complexity:</strong> Extremely difficult to value and risk-manage<br>
+                                                    <strong>Example:</strong> Rainbow basket with 50% tech, 30% healthcare, 20% energy<br>
+                                                    <strong>Use Case:</strong> Custom portfolio views and tactical allocations<br>
+                                                    <strong>Liquidity:</strong> Typically bespoke with limited secondary market</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hybrid">B. Hybrid Products</button></h3>
+                                            <div id="hybrid" class="accordion-collapse collapse" data-bs-parent="#altExposureSub">
+                                                <div class="accordion-body small">
+                                                    <p><strong>1. Multi-Asset Class Products</strong><br>
+                                                    Combine exposure to multiple asset classes (equities, commodities, currencies, rates) in a single structured product.<br>
+                                                    <strong>Structure:</strong> Options on different asset classes with correlation plays<br>
+                                                    <strong>Objective:</strong> Portfolio diversification, inflation hedging, thematic plays<br>
+                                                    <strong>Example:</strong> Product linked to 40% equities + 30% commodities + 30% bonds<br>
+                                                    <strong>Correlation Management:</strong> Key determinant of performance and risk<br>
+                                                    <strong>Rebalancing:</strong> May include periodic rebalancing rules<br>
+                                                    <strong>Complexity:</strong> Multi-dimensional risk requiring sophisticated models</p>
+                                                    <p><strong>2. Structured Products with Insurance Features</strong><br>
+                                                    Combine investment features with insurance elements like mortality protection, longevity risk transfer, or catastrophe bonds.<br>
+                                                    <strong>Structure:</strong> Investment component + insurance wrapper or derivatives<br>
+                                                    <strong>Examples:</strong> Variable annuities with guarantees, catastrophe-linked notes<br>
+                                                    <strong>Regulation:</strong> Often subject to both securities and insurance regulation<br>
+                                                    <strong>Example:</strong> Catastrophe bond paying enhanced coupons unless hurricane occurs<br>
+                                                    <strong>Risk Transfer:</strong> Transfers insurance risk to capital markets<br>
+                                                    <strong>Pricing:</strong> Requires actuarial modeling in addition to financial modeling</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#exotic">C. Exotic Underlyings</button></h3>
+                                            <div id="exotic" class="accordion-collapse collapse" data-bs-parent="#altExposureSub">
+                                                <div class="accordion-body small">
+                                                    <p><strong>1. Volatility Products</strong><br>
+                                                    Provide direct exposure to volatility indices (like VIX) or volatility itself as an asset class.<br>
+                                                    <strong>Structure:</strong> Futures/options on volatility indices or variance swaps<br>
+                                                    <strong>Contango:</strong> Suffer from contango in VIX futures, causing roll decay<br>
+                                                    <strong>Use:</strong> Portfolio hedging, speculative volatility plays<br>
+                                                    <strong>Example:</strong> VIX-linked note with 2x exposure to VIX futures<br>
+                                                    <strong>Risk:</strong> Extreme volatility spikes can cause dramatic losses<br>
+                                                    <strong>Hedging Use:</strong> Effective portfolio diversifier during market stress</p>
+                                                    <p><strong>2. Inflation-Linked Products</strong><br>
+                                                    Returns linked to inflation indices (CPI) with floors, caps, or leveraged exposure.<br>
+                                                    <strong>Structure:</strong> Inflation swaps, options on inflation indices<br>
+                                                    <strong>Protection:</strong> Often include floors to protect against deflation<br>
+                                                    <strong>Example:</strong> CPI + 2% with 0% floor and 5% cap<br>
+                                                    <strong>Use Case:</strong> Retirement planning, real return objectives<br>
+                                                    <strong>Indexation Lag:</strong> CPI reporting lag can affect performance timing<br>
+                                                    <strong>Real Yield:</strong> Provides real (inflation-adjusted) returns</p>
+                                                    <p><strong>3. Commodity-Linked Products</strong><br>
+                                                    Exposure to commodity prices with structured payoffs, often including features like rolling futures, backwardation plays, or seasonal patterns.<br>
+                                                    <strong>Structure:</strong> Commodity futures, options, or swaps with enhancements<br>
+                                                    <strong>Roll Yield:</strong> Can capture positive roll yield in backwardated markets<br>
+                                                    <strong>Example:</strong> Oil-linked note with Asian-style averaging and 20% downside buffer<br>
+                                                    <strong>Storage Costs:</strong> Embedded in futures pricing structure<br>
+                                                    <strong>Seasonality:</strong> Can exploit seasonal patterns in agricultural commodities<br>
+                                                    <strong>Diversification:</strong> Low correlation with traditional assets</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card shadow-sm upload-card">
+                <div class="card-header fw-bold" style="background:var(--primary);color:#fff;">
+                    Upload Your Termsheet
+                </div>
+                <div class="card-body">
+                    <form id="evalForm" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Email Address *</label>
+                            <input type="email" class="form-control" id="email" name="email_address"
+                                   placeholder="you@company.com" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Report Language</label>
+                            <select class="form-select" id="language" name="language">
+                                <option value="en" selected>English</option>
+                                <option value="de">German</option>
+                                <option value="fr">French</option>
+                                <option value="it">Italian</option>
+                                <option value="es">Spanish</option>
+                                <option value="zh">Chinese (Traditional)</option>
+                                <option value="ja">Japanese</option>
+                                <option value="ko">Korean</option>
+                                <option value="ar">Arabic</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Upload Termsheet</label>
+                            <input type="file" class="form-control" id="fileInput" name="file"
+                                   accept=".pdf,.xlsx,.xls,.docx,.doc" required>
+                            <div class="form-text">Supported: PDF, Excel, Word (max 50 MB)</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg w-100" id="submitBtn">
+                            Analyze My Termsheet
+                        </button>
+                    </form>
+
+                    <div id="resultBox" class="mt-3"></div>
+
+                    <hr>
+                    <p class="text-muted small mb-0">
+                        Need more? Try the <a href="https://speval.tokenengine.ai/" target="_blank"><strong>full version</strong></a>
+                        with unlimited analyses, PDF downloads, and custom branding.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.getElementById('evalForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    const resultBox = document.getElementById('resultBox');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Submitting...';
+    resultBox.style.display = 'none';
+
+    const formData = new FormData(this);
+    try {
+        const resp = await fetch('/evaluate', { method: 'POST', body: formData });
+        const data = await resp.json();
+        resultBox.style.display = 'block';
+        if (resp.status === 200) {
+            resultBox.innerHTML =
+                '<div class="alert alert-success"><strong>Submitted!</strong> ' + (data.message || '') + '</div>' +
+                '<div class="alert alert-info"><i class="bi bi-hourglass-split"></i> Please allow <strong>15-20 minutes</strong>. Check your <strong>spam/junk</strong> folder.</div>';
+            btn.innerHTML = 'Submitted!';
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-success');
+        } else if (resp.status === 429) {
+            resultBox.innerHTML =
+                '<div class="alert alert-warning">Visit <a href="https://speval.tokenengine.ai/" target="_blank">speval.tokenengine.ai</a> for the full version with unlimited analyses.</div>';
+            btn.disabled = false;
+            btn.innerHTML = 'Analyze My Termsheet';
+        } else {
+            resultBox.innerHTML = '<div class="alert alert-danger">' + (data.detail || data.error || 'Unknown error') + '</div>';
+            btn.disabled = false;
+            btn.innerHTML = 'Analyze My Termsheet';
+        }
+    } catch (err) {
+        resultBox.style.display = 'block';
+        resultBox.innerHTML = '<div class="alert alert-danger">Connection error: ' + err.message + '</div>';
+        btn.disabled = false;
+        btn.innerHTML = 'Analyze My Termsheet';
+    }
+});
+</script>
+
+</body>
+</html>
